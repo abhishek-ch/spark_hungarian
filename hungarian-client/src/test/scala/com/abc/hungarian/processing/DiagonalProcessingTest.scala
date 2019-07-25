@@ -45,9 +45,13 @@ class DiagonalProcessingTest extends AbstractDatasetSuitSpec {
           ))
         .toDF
 
-      DiagonalProcessing.stepX_diagonalTriggerLines(df,
-                                                    Seq[Long](0),
-                                                    Seq[Long]())
+      val resultTuple =
+        DiagonalProcessing.stepX_diagonalTriggerLines(df,
+                                                      Seq[Long](0),
+                                                      Seq[Long]())
+
+      assert(resultTuple._2.length == 4)
+      assert(resultTuple._2.sorted == Seq[Long](0, 1, 2, 3))
 
     }
   }

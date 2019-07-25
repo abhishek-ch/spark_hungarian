@@ -56,9 +56,10 @@ object DiagonalProcessing extends SparkSessionImplicits {
     * @param colSeq
     * @return
     */
-  def stepX_diagonalTriggerLines(dataFrame: DataFrame,
-                                 rowSeq: Seq[Long],
-                                 colSeq: Seq[Long]) = {
+  def stepX_diagonalTriggerLines(
+      dataFrame: DataFrame,
+      rowSeq: Seq[Long],
+      colSeq: Seq[Long]): (DataFrame, ListBuffer[Long], ListBuffer[Long]) = {
     //val cleanedDF = DFScanner.getUncrossedDataframe(dataFrame, rowSeq)
 
     //    Main list to hold all the indices during diagonal rule processing
@@ -92,7 +93,7 @@ object DiagonalProcessing extends SparkSessionImplicits {
     println(s"Diagonal Rule optimization with row ${mainRowIndicesList.mkString(
       ", ")} and columns ${mainColIndicesList.mkString(", ")}")
 
-    dataFrame
+    (dataFrame, mainRowIndicesList, mainColIndicesList)
   }
 
 }

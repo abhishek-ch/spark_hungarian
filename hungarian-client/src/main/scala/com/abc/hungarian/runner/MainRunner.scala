@@ -64,7 +64,9 @@ object MainRunner extends SparkSessionImplicits {
             .length <= 1)
         runCycle(resultDF, maxCycle, currentCycle + 1)
       else
-        DiagonalProcessing.stepX_diagonalTriggerLines(resultDF, rowSeq, colSeq)
+        DiagonalProcessing
+          .stepX_diagonalTriggerLines(resultDF, rowSeq, colSeq)
+          ._1
     }
 
   }
