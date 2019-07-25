@@ -1,0 +1,12 @@
+/.config
+/.build.env
+.idea
+.env
+.DS_Store
+target/
+derby.log
+Dockerfile.*
+hungarian-client/spark-warehouse
+/.spark-warehouse
+project/target
+project/project
