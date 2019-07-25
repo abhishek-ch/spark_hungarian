@@ -65,6 +65,7 @@ object MainRunner extends SparkSessionImplicits {
       println("Optimized Dataframe found ...")
       return colDF
     } else {
+      //  if resultDF has more than 1 unmarked zeroes, then we need to do diagonal processing
       if (DiagonalProcessing
             .findNumberOfZeros(colDF, rowSeq, colSeq)
             .length > 1) {
@@ -81,7 +82,6 @@ object MainRunner extends SparkSessionImplicits {
         colSeq)
       println(s"Processing Normal Cycle ${currentCycle + 1}")
       runCycle(resultDF, maxCycle, currentCycle + 1)
-      //  if resultDF has more than 1 unmarked zeroes, then we need to do diagonal processing
 
     }
 

@@ -56,6 +56,6 @@ lazy val clientStrategy = Project("hungarian-client", file("hungarian-client"))
   .settings(assemblySettings: _*)
   .settings(
     libraryDependencies ++= Dependencies.jacksonDependencies,
-    mainClass in assembly := Some("com.abc.hungarian.TestMainSpark"),
+    mainClass in assembly := Some("com.abc.hungarian.Main"),
     assemblyOutputPath in assembly := file(s"target/spark-hungarian.jar")
   )
