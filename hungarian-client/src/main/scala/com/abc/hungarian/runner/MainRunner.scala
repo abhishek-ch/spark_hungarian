@@ -5,8 +5,18 @@ import com.abc.hungarian.scanner.{DFScanner, DataOptimization, RowColReduction}
 import com.abc.hungarian.utils.SparkSessionImplicits
 import org.apache.spark.sql.DataFrame
 import org.apache.spark.sql.types.LongType
+import org.apache.spark.sql.functions._
 
 object MainRunner extends SparkSessionImplicits {
+
+  private def balanceDataFrame(dataFrame: DataFrame): DataFrame = {
+    val columnCount = dataFrame.columns.length
+    val rowCount = dataFrame.count()
+
+    if (columnCount < rowCount) {
+      dataFrame.withColumn(s"_${columnCount + 1}", lit(0L))
+    } else dataFrame
+  }
 
   def run(inputDF: DataFrame, cycle: Int = 3): Seq[List[Long]] = {
     println(
@@ -17,7 +27,9 @@ object MainRunner extends SparkSessionImplicits {
       assert(field.dataType == LongType, "Each Field must be Long Type")
     })
 
-    val finalDF = runCycle(inputDF, cycle, 1)
+    val mainDF = balanceDataFrame(inputDF)
+    mainDF.cache()
+    val finalDF = runCycle(mainDF, cycle, 1)
     if (finalDF.rdd.isEmpty())
       println(s"Unable to find optimized solution withing $cycle Cycles")
     else {
@@ -35,8 +47,7 @@ object MainRunner extends SparkSessionImplicits {
     if (currentCycle > maxCycle)
       return spark.emptyDataFrame
     println(s"Running cycle $currentCycle of maximum cycle $maxCycle")
-    //    inputDF.show()
-    inputDF.cache()
+
     val rowsCount = inputDF.count()
 
     val rowDF = RowColReduction.step1_RowReduction(inputDF)
@@ -58,7 +69,6 @@ object MainRunner extends SparkSessionImplicits {
             .findNumberOfZeros(colDF, rowSeq, colSeq)
             .length > 1) {
 
-        colDF.show()
         println(s"Trying to process Diagonal Rule now !!!")
         return DiagonalProcessing
           .stepX_diagonalTriggerLines(colDF, rowSeq, colSeq)

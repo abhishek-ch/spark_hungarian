@@ -36,7 +36,7 @@ object ResultPostProcessing extends SparkSessionImplicits {
       .collect()
       .toList
 
-    println(resultList.mkString(","))
+    println(s"The Optimized position of each entry ${resultList.mkString(",")}")
     val resultCombinations =
       UtilityFunctions.listOfListsCombinations(resultList)
 

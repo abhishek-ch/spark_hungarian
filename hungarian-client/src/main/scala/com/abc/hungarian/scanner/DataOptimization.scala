@@ -21,6 +21,8 @@ object DataOptimization extends SparkSessionImplicits {
       .withColumn("minRowValue", array_min(array(dfColumns.map(col): _*)))
       .select("minRowValue")
 
+    minDF.show()
+
     val minArr = minDF.as[Long].collect()
     var globalMin = Long.MaxValue
     minArr.zipWithIndex.foreach {
@@ -49,6 +51,8 @@ object DataOptimization extends SparkSessionImplicits {
       sourceDF: DataFrame,
       rowCrossedIndices: Seq[Long],
       colCrossedIndices: Seq[Long]): DataFrame = {
+
+    sourceDF.show()
 
     val globalMinima = spark.sparkContext.broadcast(
       findMinUndeletedCellValue(sourceDF, rowCrossedIndices, colCrossedIndices))

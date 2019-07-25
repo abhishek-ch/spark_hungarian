@@ -67,6 +67,30 @@ class MainRunnerTest extends AbstractDatasetSuitSpec {
       }
 
     }
+
+    it("unbalanced dataframe must be able to optimize") {
+      val inputSeq = Seq(
+        (10, 19, 8, 15),
+        (10, 18, 7, 17),
+        (13, 16, 9, 14),
+        (12, 19, 8, 18),
+        (14, 17, 10, 19)
+      ).map(
+        eachTuple =>
+          (eachTuple._1.toLong,
+           eachTuple._2.toLong,
+           eachTuple._3.toLong,
+           eachTuple._4.toLong))
+
+      val df = spark
+        .createDataFrame(inputSeq)
+        .toDF
+
+      val resultList = MainRunner.run(df)
+      println(resultList)
+      assert(resultList.length == 1)
+      assert(resultList(0) === List[Long](1, 3, 4, 5, 2))
+    }
   }
 
 }

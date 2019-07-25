@@ -1,8 +1,8 @@
 package com.abc.hungarian.utils
 
-import org.apache.spark.sql.Row
+import org.apache.spark.sql.{DataFrame, Row}
 import org.apache.spark.sql.expressions.UserDefinedFunction
-import org.apache.spark.sql.functions.udf
+import org.apache.spark.sql.functions.{lit, udf}
 
 object UtilityFunctions {
 
