@@ -37,8 +37,10 @@ class MainRunnerTest extends AbstractDatasetSuitSpec {
       assert(resultList.length > 0)
       assert(resultList(0) === List[Long](2, 3, 1))
     }
+  }
 
-    it("end to end another trial") {
+  describe(".testEnd2EndWithDiagonalRule") {
+    it("dataframe must optimize using diagonal rule") {
       val df = spark
         .createDataFrame(
           Seq(
@@ -51,6 +53,18 @@ class MainRunnerTest extends AbstractDatasetSuitSpec {
 
       val resultList = MainRunner.run(df)
       println(resultList)
+      assert(resultList.length == 2)
+
+      val result1 = resultList(0)
+      val result2 = resultList(1)
+
+      if (result1(0) == 2) {
+        assert(result1 == List[Long](2, 4, 3, 1))
+        assert(result2 == List[Long](4, 3, 2, 1))
+      } else {
+        assert(result2 == List[Long](2, 4, 3, 1))
+        assert(result1 == List[Long](4, 3, 2, 1))
+      }
 
     }
   }

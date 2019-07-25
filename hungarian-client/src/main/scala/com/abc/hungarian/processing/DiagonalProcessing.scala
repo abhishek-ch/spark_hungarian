@@ -41,7 +41,7 @@ object DiagonalProcessing extends SparkSessionImplicits {
       .count()
 
     println(
-      "Total Number of Zeroes Found " + onlyZerosCollAccum.value.toList
+      "Total Number of UNMARKED ZEROES Found " + onlyZerosCollAccum.value.toList
         .mkString(","))
 
     onlyZerosCollAccum.value.toList

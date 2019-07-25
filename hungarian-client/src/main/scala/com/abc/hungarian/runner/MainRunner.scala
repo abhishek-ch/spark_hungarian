@@ -22,7 +22,7 @@ object MainRunner extends SparkSessionImplicits {
       println(s"Unable to find optimized solution withing $cycle Cycles")
     else {
       println(s"Hurray !!! Hungarian found the optimized Dataframe")
-      //      finalDF.show()
+      finalDF.show()
     }
 
     ResultPostProcessing.extractIndicesFromDataframe(
@@ -35,7 +35,7 @@ object MainRunner extends SparkSessionImplicits {
     if (currentCycle > maxCycle)
       return spark.emptyDataFrame
     println(s"Running cycle $currentCycle of maximum cycle $maxCycle")
-    inputDF.show()
+    //    inputDF.show()
     inputDF.cache()
     val rowsCount = inputDF.count()
 
@@ -54,21 +54,26 @@ object MainRunner extends SparkSessionImplicits {
       println("Optimized Dataframe found ...")
       return colDF
     } else {
+      if (DiagonalProcessing
+            .findNumberOfZeros(colDF, rowSeq, colSeq)
+            .length > 1) {
+
+        colDF.show()
+        println(s"Trying to process Diagonal Rule now !!!")
+        return DiagonalProcessing
+          .stepX_diagonalTriggerLines(colDF, rowSeq, colSeq)
+          ._1
+      }
+
       val resultDF = DataOptimization.step5_addAndDeleteGlobalMinFromDataFrame(
         colDF,
         rowSeq,
         colSeq)
+      println(s"Processing Normal Cycle ${currentCycle + 1}")
+      runCycle(resultDF, maxCycle, currentCycle + 1)
       //  if resultDF has more than 1 unmarked zeroes, then we need to do diagonal processing
-      if (DiagonalProcessing
-            .findNumberOfZeros(resultDF, rowSeq, colSeq)
-            .length <= 1)
-        runCycle(resultDF, maxCycle, currentCycle + 1)
-      else
-        DiagonalProcessing
-          .stepX_diagonalTriggerLines(resultDF, rowSeq, colSeq)
-          ._1
+
     }
 
   }
-
 }

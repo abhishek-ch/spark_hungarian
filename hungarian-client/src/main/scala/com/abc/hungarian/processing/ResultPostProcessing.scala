@@ -2,7 +2,7 @@ package com.abc.hungarian.processing
 
 import com.abc.hungarian.utils.{SparkSessionImplicits, UtilityFunctions}
 import org.apache.spark.sql.DataFrame
-import org.apache.spark.sql.functions.{col, struct}
+import org.apache.spark.sql.functions._
 
 import scala.collection.mutable.ListBuffer
 
@@ -13,7 +13,8 @@ object ResultPostProcessing extends SparkSessionImplicits {
       resultDF
         .withColumn(
           "zeroCol",
-          UtilityFunctions.findZeroUdf(struct(resultDF.columns.map(col): _*)))
+          UtilityFunctions.findZeroUdf(struct(resultDF.columns.map(col): _*),
+                                       typedLit(Seq[Long]())))
         .select("zeroCol")
     else
       resultDF
