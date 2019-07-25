@@ -52,8 +52,6 @@ object DataOptimization extends SparkSessionImplicits {
       rowCrossedIndices: Seq[Long],
       colCrossedIndices: Seq[Long]): DataFrame = {
 
-    sourceDF.show()
-
     val globalMinima = spark.sparkContext.broadcast(
       findMinUndeletedCellValue(sourceDF, rowCrossedIndices, colCrossedIndices))
     val bcRowIndices = spark.sparkContext.broadcast(rowCrossedIndices)

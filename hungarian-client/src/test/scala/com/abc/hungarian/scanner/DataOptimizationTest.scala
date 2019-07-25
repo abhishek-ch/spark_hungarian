@@ -4,8 +4,8 @@ import com.abc.hungarian.utils.AbstractDatasetSuitSpec
 
 class DataOptimizationTest extends AbstractDatasetSuitSpec {
 
-  describe(".findMinUndeletedCellValues") {
-    it("test me") {
+  describe(".testDataOptimization") {
+    it("must return final global minima along with crossed rows columns") {
       val df = spark
         .createDataFrame(
           Seq(
@@ -25,14 +25,26 @@ class DataOptimizationTest extends AbstractDatasetSuitSpec {
 
       println(
         s"Row Seqeuence ${rowSeq.mkString(",")} Column Sequence ${colSeq.mkString(",")}")
+      assert(rowSeq == Seq[Long](0, 1, 4))
+      assert(colSeq == Seq[Long](2))
 
-      colDF.show()
+      val expectedDF = spark
+        .createDataFrame(
+          Seq(
+            (2L, 4L, 6L, 1L, 0L),
+            (0L, 9L, 6L, 4L, 4L),
+            (7L, 8L, 0L, 0L, 3L),
+            (2L, 0L, 0L, 0L, 0L),
+            (0L, 5L, 6L, 0L, 7L)
+          )
+        )
+        .toDF
 
       val resultDF =
         DataOptimization.step5_addAndDeleteGlobalMinFromDataFrame(colDF,
                                                                   rowSeq,
                                                                   colSeq)
-      resultDF.show()
+      assertDataFrameEquals(expectedDF, resultDF)
 
     }
 
