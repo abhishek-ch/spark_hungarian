@@ -77,7 +77,10 @@ For Docker please [refer](https://github.com/abhishek-ch/spark-docker)
  * This is my _I am bored_ project, so not very well documented, will
  try to get them done.
  * Currently it supports Balanced Input and automatically balanced Column but not Row.
- >TODO defect no row-wise auto balance support
+ > TODO defect no row-wise auto balance support
+ * Column level zero crossing(marking row level) is based on Driver !
+ > TODO defect scaleup column zero crossing
+ 
  
  
  ### References
