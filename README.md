@@ -9,7 +9,7 @@ computer science, combinatorial optimization is a topic that consists of finding
 
 This is NP Problem. 
 I had 2 choices, either over Spark Dataframe or Graph(Bipartite), may be Spark [GraphX](https://spark.apache.org/docs/latest/graphx-programming-guide.html)
-or any other Pregel format.
+or any other distributed Pregel library.
 
 Finally I decided to solve it  distributed way on top
 of Spark Dataframe. GraphX is not that mature enough and implementing
@@ -43,13 +43,26 @@ http://www.math.harvard.edu/archive/20_spring_05/handouts/assignment_overheads.p
 Use Spark Dataframe as core source for entire logic. All major steps
 are distributed except 1 which is on top of driver.
 
+The system is designed to iterate row/column scanning any number of times & that can be
+provided by user _(default is 3)_.
+**Diagonal Rule** is as well auto-applied when required.
+
 For Graph oriented design, do refer [Bipartite Matching & the Hungarian Method](http://www.cse.ust.hk/~golin/COMP572/Notes/Matching.pdf)
 
 
 #### Testing
 sbt test
 
+* Main Source of test MainRunnerTest
+* Diagonal Rule Specific Test DiagonalProcessingTest
+* Data Load, Col and Row Scanning Reduction Test in scanner package
+
 For Docker please [refer](https://github.com/abhishek-ch/spark-docker)
+
+#### Run
+
+* Pass a parquet path to com.abc.hungarian.Main
+* 
 
 ## Notes
 
@@ -61,8 +74,10 @@ For Docker please [refer](https://github.com/abhishek-ch/spark-docker)
  > TODO defect Column Name
  * Currently the code only reads/support parquet type, but adding
  new sources are very easy !
- * This is my _I am bored_ project, so not very wel documented, will
+ * This is my _I am bored_ project, so not very well documented, will
  try to get them done.
+ * Currently it supports Balanced Input and automatically balanced Column but not Row.
+ >TODO defect no row-wise auto balance support
  
  
  ### References
