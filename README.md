@@ -1,4 +1,4 @@
-# Distributed Hungarian Method on Spark 
+# Distributed Hungarian Method using Apache Spark 
 
 ### Introduction
 
@@ -62,7 +62,7 @@ For Docker please [refer](https://github.com/abhishek-ch/spark-docker)
 #### Run
 
 * Pass a parquet path to com.abc.hungarian.Main
-* 
+
 
 ## Notes
 
